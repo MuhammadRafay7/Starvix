@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+@theme {
+  /* v4 Theme Extensions */
+  --font-montserrat: "Montserrat", var(--font-montserrat);
+  --font-inter: "Inter", var(--font-inter);
+
+  /* Dynamic brand accent — backed by the runtime --accent variable.
+     Lets `bg-accent`, `text-accent`, `border-accent/30`, etc. follow the
+     brand color (admin + public share one accent system). */
+  --color-accent: var(--accent);
+  
+  /* Custom Luxury Easing */
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  
+  /* Animation Overrides */
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+:root {
+  /* UPDATED: Concrete & Cobalt Palette */
+  --background: #334155;    /* Primary Canvas */
+  --surface: #1E293B;       /* Deep Slate Surface */
+  --foreground: #F8FAFC;    /* Clean Slate Ink */
+  --accent: #38BDF8;       /* Signal Cyan */
+  
+  /* FIX: Viewport height variable for mobile toolbars */
+  --vh: 1vh;
+}
+
+/* Global resets */
+html {
+  scroll-behavior: smooth;
+  cursor: crosshair;
+  /* FIX: Ensure html doesn't trap the height calculation */
+  height: -webkit-fill-available;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* FIX: Standardize height for mobile browsers */
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  
+  /* Keep your overflow-x hidden but ensure it's on the body, not html */
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* FIX: Ensure Next.js Image fill works correctly */
+img {
+  max-width: none;
+}
+
+/* Custom Text Selection */
+::selection {
+  background-color: var(--accent);
+  color: var(--surface);
+}
+
+/* Luxury Glassmorphism Utility */
+@utility glass {
+  background: rgba(30, 41, 59, 0.6); /* Adjusted to match surface color */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(248, 250, 252, 0.08);
+}
+
+/* High-End Grain Overlay */
+@utility bg-grain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 9999;
+  filter: contrast(170%) brightness(100%);
+}
+
+/* Utility for Vertical Coordinate Text */
+@utility vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* Typography Overrides */
+h1, h2, h3, h4, .font-montserrat {
+  font-family: var(--font-montserrat), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Smooth Image Reveal Mask */
+@utility reveal-mask {
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ---- Printable CV ---- */
+.cv-sheet {
+  /* Force accent/background colors to render in the printed PDF */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+@media print {
+  html { cursor: auto; }
+  .no-print { display: none !important; }
+  body { background: #fff !important; }
+  .cv-sheet {
+    box-shadow: none !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+  }
+  @page { margin: 1.2cm; }
+}
